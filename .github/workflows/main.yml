@@ -23,7 +23,7 @@ jobs:
           Solution_Name: src\WebApplicationDGP.sln
           Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
           Wap_Project_Path: src/WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-          working-directory: src\WebApplicationDGP
+          working_directory: src\WebApplicationDGP
 
           
       steps:
@@ -33,7 +33,7 @@ jobs:
           with:
             dotnet-version: '2.2.x'
         - name: Install dependencies
-          run: dotnet restore $env:working-directory
+          run: dotnet restore $env:working_directory
         - name: Build
           run: dotnet build
         - name: Test with the dotnet CLI
