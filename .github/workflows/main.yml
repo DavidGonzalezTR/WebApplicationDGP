@@ -26,9 +26,6 @@ jobs:
           Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
           working_directory: src\WebApplicationDGP
           test_result_path: src\TestProject1\TestResults
-          AZURE_WEBAPP_NAME: WebApplicationDGP   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-          NODE_VERSION: '10.x'                # set this to the node version to use
           
 
           
