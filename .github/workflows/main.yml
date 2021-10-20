@@ -46,6 +46,6 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
            name: dotnet-results-${{ matrix.dotnet-version }}
-           path: $env:Test_result_Path
+           path: src\TestProject1\TestResults-${{ matrix.dotnet-version }}
               # Use always() to always run this step to publish test results when there are test failures
           if: ${{ always() }}
