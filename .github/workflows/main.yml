@@ -44,5 +44,5 @@ jobs:
           uses: NasAmin/trx-parser@v0.2.0
           id: trx-parser
           with:
-            TRX_PATH: ${{ github.workspace }} src/TestProject1/TestResults #This should be the path to your TRX files
+            TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
