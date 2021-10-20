@@ -58,6 +58,7 @@ jobs:
           with:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
+            
         - name: Login via Az module
           uses: azure/login@v1
           with:
