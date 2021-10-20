@@ -7,9 +7,16 @@ jobs:
   build-and-deploy:
     runs-on: windows-latest
     steps:
-
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.0.72
+        inlineScript: |
+          az logout
+          az cache purge
+          az account clear
+      
     - name: Login via Az module
-      run: az account clear
       uses: azure/login@v1
 
       with:
@@ -26,3 +33,6 @@ jobs:
         azPSVersion: '3.1.0'
         inlineScript: |
           Get-AzVM -ResourceGroupName "ActionsDemo"
+          
+
+
