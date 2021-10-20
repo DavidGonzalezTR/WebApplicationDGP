@@ -15,7 +15,7 @@ jobs:
   build:
       strategy:
         matrix:
-          dotnet-version: [ '2.2.x' ]
+          dotnet-version: [ '3.1.x' ]
           type: [unitarias]
       runs-on: windows-latest
       
@@ -31,7 +31,7 @@ jobs:
         - name: Setup dotnet
           uses: actions/setup-dotnet@v1
           with:
-            dotnet-version: '2.2.x'
+            dotnet-version: '3.1.x'
         - name: Install dependencies
           run: dotnet restore $env:Wap_Project_Path
         - name: Build
