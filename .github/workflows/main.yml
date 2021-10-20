@@ -1,6 +1,6 @@
+#
 # This is a basic workflow to help you get started with Actions
 # run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
-#
 
 name: WorkFlow CI
 
@@ -26,6 +26,10 @@ jobs:
           Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
           working_directory: src\WebApplicationDGP
           test_result_path: src\TestProject1\TestResults
+          AZURE_WEBAPP_NAME: WebApplicationDGP   # set this to your application's name
+          AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+          NODE_VERSION: '10.x'                # set this to the node version to use
+          
 
           
       steps:
@@ -54,3 +58,19 @@ jobs:
           with:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
+        - name: Login via Az module
+          uses: azure/login@v1
+          with:
+            creds: ${{secrets.AZURE_CREDENTIALS}}
+            enable-AzPSSession: true
+
+        - name: Run Az CLI script
+          run: |
+            az webapp list --query "[?state=='Running']"
+
+        - name: Run Azure PowerShell script
+          uses: azure/powershell@v1
+          with:
+            azPSVersion: '3.1.0'
+            inlineScript: |
+              Get-AzVM -ResourceGroupName "ActionsDemo"
