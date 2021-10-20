@@ -38,4 +38,4 @@ jobs:
         - name: Build
           run: dotnet build $env:Wap_Project_Path
         - name: Test with the dotnet CLI
-          run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory $env:test_result_path
+          run: dotnet test $env:Test_Project_Path --logger trx --results-directory $env:test_result_path
