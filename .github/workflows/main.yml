@@ -46,3 +46,7 @@ jobs:
           with:
             TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Publish
+          run: dotnet publish $env:Wap_Project_Path
+            
+            
