@@ -24,6 +24,7 @@ jobs:
           Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
           Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
           working_directory: src\WebApplicationDGP
+          test_result_path: src\TestProject1\TestResults-${{ matrix.dotnet-version }}
 
           
       steps:
@@ -45,6 +46,6 @@ jobs:
           uses: actions/upload-artifact@v2
           with:
            name: dotnet-results-${{ matrix.dotnet-version }}
-           path: src\ThomsonReuters.ProxyInfolex.Test\TestResults-${{ matrix.dotnet-version }}
+           path: $env:Test_result_Path
               # Use always() to always run this step to publish test results when there are test failures
           if: ${{ always() }}
