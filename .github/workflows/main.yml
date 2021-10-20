@@ -1,4 +1,5 @@
 # This is a basic workflow to help you get started with Actions
+# run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
 
 name: WorkFlow CI
 
@@ -17,6 +18,13 @@ jobs:
           dotnet-version: [ '3.1.x' ]
           type: [unitarias]
       runs-on: windows-latest
+      
+      env:
+          Solution_Name: src\WebApplicationDGP.sln
+          Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
+          Wap_Project_Path: src/WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+
+          
       steps:
         - uses: actions/checkout@v2
         - name: Setup dotnet
@@ -28,4 +36,4 @@ jobs:
         - name: Build
           run: dotnet build
         - name: Test with the dotnet CLI
-          run: dotnet test
+          run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
