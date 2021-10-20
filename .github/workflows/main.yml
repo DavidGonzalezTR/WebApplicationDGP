@@ -38,7 +38,8 @@ jobs:
         - name: Build
           run: dotnet build $env:Wap_Project_Path
         - name: Test with the dotnet CLI
-          run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+        
+          run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "src\TestProject1\TestResults-${{ matrix.dotnet-version }}"
           env:
              Configuration: ${{ matrix.configuration }} 
         #upload test result
