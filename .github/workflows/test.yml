@@ -9,6 +9,7 @@ jobs:
     steps:
 
     - name: Login via Az module
+      run: az account clear
       uses: azure/login@v1
 
       with:
