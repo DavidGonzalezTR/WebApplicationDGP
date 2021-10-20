@@ -47,6 +47,9 @@ jobs:
             TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         - name: Publish
-          run: dotnet publish $env:Wap_Project_Path
-            
-            
+          run: dotnet publish $env:Wap_Project_Path         
+        - name: Upload WebApp Build Artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: WebAppDGP
+            path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
