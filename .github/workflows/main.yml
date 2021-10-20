@@ -12,6 +12,10 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
+      strategy:
+        matrix:
+          dotnet-version: [ '2.2.x' ]
+          type: [unitarias]
+      runs-on: windows-latest
+      steps:
+        - uses: actions/checkout@v2
