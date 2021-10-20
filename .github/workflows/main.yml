@@ -35,6 +35,6 @@ jobs:
         - name: Install dependencies
           run: dotnet restore $env:Wap_Project_Path
         - name: Build
-          run: dotnet build
+          run: dotnet build $env:Wap_Project_Path
         - name: Test with the dotnet CLI
           run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
