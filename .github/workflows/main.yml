@@ -38,3 +38,13 @@ jobs:
           run: dotnet build $env:Wap_Project_Path
         - name: Test with the dotnet CLI
           run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+          env:
+             Configuration: ${{ matrix.configuration }} 
+        #upload test result
+        - name: Upload dotnet test results
+          uses: actions/upload-artifact@v2
+          with:
+           name: dotnet-results-${{ matrix.dotnet-version }}
+           path: src\ThomsonReuters.ProxyInfolex.Test\TestResults-${{ matrix.dotnet-version }}
+              # Use always() to always run this step to publish test results when there are test failures
+          if: ${{ always() }}
