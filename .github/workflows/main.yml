@@ -40,9 +40,9 @@ jobs:
         - name: Test with the dotnet CLI
           run: dotnet test $env:Test_Project_Path --logger trx --results-directory $env:test_result_path
  # Using the trx-parser action
-      - name: Parse Trx files
-        uses: NasAmin/trx-parser@v0.1
-        id: trx-parser
-        with:
-          TRX_PATH: ${{ github.workspace }}/TestResults #This should be the path to your TRX files
-          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
+        - name: Parse Trx files
+          uses: NasAmin/trx-parser@v0.1
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
