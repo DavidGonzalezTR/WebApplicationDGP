@@ -32,7 +32,8 @@ jobs:
           with:
             dotnet-version: '2.2.x'
         - name: Install dependencies
-          run: dotnet restore $env:Solution_Name
+          run: dotnet restore
+          working-directory: src\WebApplicationDGP
         - name: Build
           run: dotnet build
         - name: Test with the dotnet CLI
