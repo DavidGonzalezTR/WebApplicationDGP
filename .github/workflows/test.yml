@@ -6,16 +6,8 @@ name: AzurePowerShellSample
 jobs:
 
   build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Azure CLI script
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az logout
-          az cache purge
-          az account clear
-      
+    runs-on: windows-latest
+    steps:    
     - name: Login via Az module
       uses: azure/login@v1
 
