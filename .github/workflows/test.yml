@@ -9,7 +9,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-
+# Install azure-cli
+    - uses: elstudio/action-install-azure-cli@v1
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
