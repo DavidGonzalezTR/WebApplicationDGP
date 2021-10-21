@@ -2,15 +2,18 @@
 
 on: [push]
 
-name: AzureCLISample
+name: AzureLoginSample
 
 jobs:
 
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
-    
-    - name: Azure Login
-      uses: azure/actions/login@v1
+
+    - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - run: |
+        az webapp list --query "[?state=='Running']"
+
