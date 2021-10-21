@@ -1,13 +1,16 @@
-#
 on: [push]
 
-name: AzurePowerShellSample
+name: AzureLoginSample
 
 jobs:
 
   build-and-deploy:
-    runs-on: windows-latest
-    steps:    
-    - uses: Azure/login@v1.1
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: azure/login@v1
       with:
-        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - run: |
+        az webapp list --query "[?state=='Running']"
