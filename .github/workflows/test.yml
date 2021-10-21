@@ -1,3 +1,4 @@
+
 # File: .github/workflows/workflow.yml
 
 on: [push]
@@ -9,10 +10,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-
+    
     - uses: Azure/login@v1.1
-      with:
-        creds: '{"clientId":"${{ secrets.CLIENT_ID }}","clientSecret":"${{ secrets.CLIENT_SECRET }}","subscriptionId":"${{ secrets.SUBSCRIPTION_ID }}","tenantId":"${{ secrets.TENANT_ID }}"}'    
 
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
     - run: |
         az webapp list --query "[?state=='Running']"
