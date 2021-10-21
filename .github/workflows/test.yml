@@ -7,7 +7,7 @@ name: AzureCLISample
 jobs:
 
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     
     - name: Azure Login
