@@ -8,23 +8,24 @@ jobs:
   build-and-deploy:
     runs-on: windows-latest
     steps:    
-    - name: Login via Az module
-      uses: azure/login@v1
+      - name: Azure Login
+        uses: Azure/login@v1.3.0
+        with:
+          creds: '{"clientId":"${{ secrets.ARM_CLIENT_ID }}","clientSecret":"${{ secrets.ARM_CLIENT_SECRET }}","subscriptionId":"${{ secrets.ARM_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.ARM_TENANT_ID }}"}'
+          enable-AzPSSession: true
 
-      with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-        enable-AzPSSession: true
 
-    - name: Run Az CLI script
-      run: |
-        az webapp list --query "[?state=='Running']"
 
-    - name: Run Azure PowerShell script
-      uses: azure/powershell@v1
-      with:
-        azPSVersion: '3.1.0'
-        inlineScript: |
-          Get-AzVM -ResourceGroupName "ActionsDemo"
+      - name: Run Az CLI script
+        run: |
+          az webapp list --query "[?state=='Running']"
+
+      - name: Run Azure PowerShell script
+        uses: azure/powershell@v1
+        with:
+          azPSVersion: '3.1.0'
+          inlineScript: |
+            Get-AzVM -ResourceGroupName "ActionsDemo"
           
 
 
