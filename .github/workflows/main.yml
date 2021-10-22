@@ -25,7 +25,7 @@ jobs:
           Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
           working_directory: src\WebApplicationDGP
           test_result_path: src\TestProject1\TestResults
-          AZURE_WEBAPP_NAME: uksouth-iflx-shar-auth-WebApplicationDGP-app   # set this to your application's name
+          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
           AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
           
 
@@ -60,6 +60,6 @@ jobs:
         - name: 'Deploy to Azure WebApp'
           uses: azure/webapps-deploy@v2
           with:
-            app-name: ${{ env.AZURE_WEBAPP_NAME }}
-            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+            app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
+            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
             package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
