@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Azure Login
-      uses: Azure/login@v1.1
+           # Authentication
+    - uses: azure/login@v1
       with:
-        creds: ${{secrets.AZURE_CREDENTIALS}}
-        enable-AzPSSession: true 
+        creds: ${{ secrets.AZURE_CREDENTIALS  }}
     - run: |
         Get-AzVM -ResourceGroupName "ResourceGroup11"
+        
+
