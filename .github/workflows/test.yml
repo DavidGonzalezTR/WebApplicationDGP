@@ -5,12 +5,13 @@ on: [push]
 name: AzurePowerShellLoginSample
 
 jobs:
-
-  build:
+  build-and-deploy-to-dev:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
-    - name: Azure Login
-           # Authentication
+    - uses: actions/checkout@master
+            
+   # Authentication
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS  }}
