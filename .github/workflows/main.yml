@@ -46,10 +46,10 @@ jobs:
           dotnet-version: [ '3.1.x' ]
           type: [unitarias]
       runs-on: windows-latest
-      
+
       steps:
         - name: Test with the dotnet CLI
-          run: dotnet test $env:Test_Project_Path --logger trx --results-directory $env:test_result_path
+          run: dotnet test src\TestProject1\TestProject1.csproj --logger trx --results-directory src\TestProject1\TestResults
  # Using the trx-parser action
         - name: trx-parser
           uses: NasAmin/trx-parser@v0.2.0
