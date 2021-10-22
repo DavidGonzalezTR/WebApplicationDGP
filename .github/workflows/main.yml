@@ -40,6 +40,7 @@ jobs:
           run: dotnet restore $env:Wap_Project_Path
         - name: Build
           run: dotnet build $env:Wap_Project_Path
+  test:        
         - name: Test with the dotnet CLI
           run: dotnet test $env:Test_Project_Path --logger trx --results-directory $env:test_result_path
  # Using the trx-parser action
@@ -49,6 +50,7 @@ jobs:
           with:
             TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ArtifactGenerate:
         - name: Publish
           run: dotnet publish $env:Wap_Project_Path         
         - name: Upload WebApp Build Artifact
@@ -56,7 +58,7 @@ jobs:
           with:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
-            
+  UploadToAzure:
         - name: 'Deploy to Azure WebApp'
           uses: azure/webapps-deploy@v2
           with:
