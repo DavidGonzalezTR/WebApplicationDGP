@@ -75,7 +75,7 @@ jobs:
       needs: ArtifactGenerate
       env:
           AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
+          AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
       steps:
         - uses: actions/checkout@v2
         - name: 'Deploy to Azure WebApp'
@@ -83,34 +83,4 @@ jobs:
           with:
             app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
             publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
-            package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-test_CORE:
-
-      runs-on: windows-latest
-      needs: UploadToAzureDEV
-
-      steps:
-        - uses: actions/checkout@v2
-        - name: Test with the dotnet CLI
-          run: dotnet test src\TestProject1\TestProject1.csproj --logger trx --results-directory src\TestProject1\TestResults
- # Using the trx-parser action
-        - name: trx-parser
-          uses: NasAmin/trx-parser@v0.2.0
-          id: trx-parser
-          with:
-            TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
-UploadToAzureQA:
-      runs-on: windows-latest
-      needs: [test_CORE,UploadToAzureDEV]
-      env:
-          AZURE_WEBAPP_NAME_QA: uksouth-iflx-shar-WebApplicationDGP-qa-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
-      steps:
-        - uses: actions/checkout@v2
-        - name: 'Deploy to Azure WebApp'
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: ${{ env.AZURE_WEBAPP_NAME_QA }}
-            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_QA }}
-            package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/WebApplicationDGP'
