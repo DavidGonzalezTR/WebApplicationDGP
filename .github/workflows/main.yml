@@ -41,16 +41,12 @@ jobs:
         - name: Build
           run: dotnet build $env:Wap_Project_Path
   test:
+      strategy:
+        matrix:
+          dotnet-version: [ '3.1.x' ]
+          type: [unitarias]
       runs-on: windows-latest
-      needs: build
-      env:
-          Solution_Name: src\WebApplicationDGP.sln
-          Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
-          Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-          working_directory: src\WebApplicationDGP
-          test_result_path: src\TestProject1\TestResults
-          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
+      
       steps:
         - name: Test with the dotnet CLI
           run: dotnet test $env:Test_Project_Path --logger trx --results-directory $env:test_result_path
