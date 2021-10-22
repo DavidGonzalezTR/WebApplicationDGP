@@ -1,12 +1,12 @@
 name: Deploy ASP.NET Core app to Azure Web App
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches:
-      - master
+    branches: [ main ]
   pull_request:
-    branches:
-      - '*'
+    branches: [ main ]
 # CONFIGURATION
 # For help, go to https://github.com/Azure/Actions
 #
