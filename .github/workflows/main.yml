@@ -73,7 +73,7 @@ jobs:
   UploadToAzureDEV:
       runs-on: windows-latest
       needs: ArtifactGenerate
-       env:
+      env:
           AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
           AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
       steps:
