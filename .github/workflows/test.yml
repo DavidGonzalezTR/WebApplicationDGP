@@ -10,17 +10,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+    
 
 jobs:
-      env:
-          Solution_Name: src\WebApplicationDGP.sln
-          Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
-          Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-          working_directory: src\WebApplicationDGP
-          test_result_path: src\TestProject1\TestResults
-          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
   build:
       strategy:
         matrix:
@@ -28,7 +20,13 @@ jobs:
           type: [unitarias]
       runs-on: windows-latest
       
-
+      env:
+          Solution_Name: src\WebApplicationDGP.sln
+          Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
+          Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+          working_directory: src\WebApplicationDGP
+          test_result_path: src\TestProject1\TestResults
+       
           
 
           
@@ -58,7 +56,18 @@ jobs:
           with:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
-            
+  Deploy:
+      strategy:
+        matrix:
+          dotnet-version: [ '3.1.x' ]
+          type: [unitarias]
+      runs-on: windows-latest
+      needs: build
+
+      env:
+          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
+          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
+
         - name: 'Deploy to Azure WebApp'
           uses: azure/webapps-deploy@v2
           with:
