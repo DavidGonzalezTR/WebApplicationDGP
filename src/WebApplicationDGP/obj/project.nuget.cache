@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "PBbE8/hvwM38HZihB3k7NPNub3LES6kQBQrOWanrzugZJLHT/jdZwZqQHulzD13bpU6nKgadP9EpwGDHF/W0wg==",
+  "dgSpecHash": "Gds0OVSUHwq3FO8SZtpldtbphJ0qSxpU4l7gHorTcLkNh1kKYxVDUxKFMVN5ni6uqDJA49m480btHF7pS0s1CQ==",
   "success": true,
-  "projectFilePath": "C:\\POC_Git\\Projects\\WebApplicationDGP\\WebApplicationDGP\\WebApplicationDGP.csproj",
+  "projectFilePath": "C:\\POC_Git\\Projects\\WebApplicationDGP\\src\\WebApplicationDGP\\WebApplicationDGP.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\u6072492\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.18\\microsoft.netcore.app.host.win-x64.3.1.18.nupkg.sha512"
   ],

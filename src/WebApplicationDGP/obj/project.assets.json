@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\POC_Git\\Projects\\WebApplicationDGP\\WebApplicationDGP\\WebApplicationDGP.csproj",
+      "projectUniqueName": "C:\\POC_Git\\Projects\\WebApplicationDGP\\src\\WebApplicationDGP\\WebApplicationDGP.csproj",
       "projectName": "WebApplicationDGP",
-      "projectPath": "C:\\POC_Git\\Projects\\WebApplicationDGP\\WebApplicationDGP\\WebApplicationDGP.csproj",
+      "projectPath": "C:\\POC_Git\\Projects\\WebApplicationDGP\\src\\WebApplicationDGP\\WebApplicationDGP.csproj",
       "packagesPath": "C:\\Users\\u6072492\\.nuget\\packages\\",
-      "outputPath": "C:\\POC_Git\\Projects\\WebApplicationDGP\\WebApplicationDGP\\obj\\",
+      "outputPath": "C:\\POC_Git\\Projects\\WebApplicationDGP\\src\\WebApplicationDGP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

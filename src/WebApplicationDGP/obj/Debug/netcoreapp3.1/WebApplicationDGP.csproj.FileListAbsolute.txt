@@ -45,7 +45,6 @@ C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\bin\Debug\netcoreapp
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\bin\Debug\netcoreapp3.1\WebApplicationDGP.pdb
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\bin\Debug\netcoreapp3.1\WebApplicationDGP.Views.dll
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\bin\Debug\netcoreapp3.1\WebApplicationDGP.Views.pdb
-C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.csproj.AssemblyReference.cache
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.AssemblyInfoInputs.cache
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.AssemblyInfo.cs
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.csproj.CoreCompileInputs.cache
@@ -72,3 +71,4 @@ C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.pdb
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.genruntimeconfig.cache
 C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.csproj.CopyComplete
+C:\POC_Git\Projects\WebApplicationDGP\src\WebApplicationDGP\obj\Debug\netcoreapp3.1\WebApplicationDGP.csproj.AssemblyReference.cache
