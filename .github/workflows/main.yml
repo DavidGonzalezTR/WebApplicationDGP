@@ -70,7 +70,7 @@ jobs:
           with:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
-  DelpoyToDEV:
+  DeployDEV:
     
       runs-on: windows-latest
       needs: build
@@ -99,7 +99,7 @@ jobs:
   testFuncionales:
 
       runs-on: windows-latest
-      needs: DelpoyToDEV
+      needs: DeployDEV
 
       steps:
         - uses: actions/checkout@v2
@@ -111,29 +111,4 @@ jobs:
           id: trx-parser
           with:
             TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
-  DelpoyToQA:
-    
-      runs-on: windows-latest
-      needs: build
-
-      env:
-          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/path/to/artifact/'      # set this to the path to your web app project, defaults to the repository root
-      
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: DownloadArtifact
-        uses: actions/download-artifact@v2
-        with:
-          name: WebAppDGP
-          path: src/WebApplicationDGP/path/to/artifact
-
-      - name: 'Deploy to Azure WebApp'
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_QA }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
