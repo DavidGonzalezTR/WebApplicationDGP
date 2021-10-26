@@ -42,7 +42,7 @@ jobs:
   
   ArtifactGenerate:
       runs-on: windows-latest
-      needs: [build,testCore]
+      needs: [build]
       env:
           Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj  
       steps:
