@@ -117,7 +117,7 @@ jobs:
     
       runs-on: windows-latest
       needs: [DeployDEV,testFuncionales]
-      if: github.ref == 'refs/heads/master'
+      if: success() && github.ref == 'refs/heads/master'
 
       env:
           AZURE_WEBAPP_NAME_QA: uksouth-iflx-shar-WebApplicationDGP-qa-app   # set this to your application's name
