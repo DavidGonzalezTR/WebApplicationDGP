@@ -49,21 +49,30 @@ jobs:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
   Deploy:
-      strategy:
-        matrix:
-          dotnet-version: [ '3.1.x' ]
-          type: [unitarias]
+    
       runs-on: windows-latest
       needs: build
 
       env:
           AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/'      # set this to the path to your web app project, defaults to the repository root
+          AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/path/to/artifact/'      # set this to the path to your web app project, defaults to the repository root
       
       steps:
-        - name: 'Deploy to Azure WebApp'
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
-            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
-            package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: DownloadArtifact
+        uses: actions/download-artifact@v2
+        with:
+          name: WebAppDGP
+          path: src/WebApplicationDGP/path/to/artifact
+
+      - name: 'Deploy to Azure WebApp'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+
+
