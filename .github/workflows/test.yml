@@ -40,15 +40,7 @@ jobs:
           run: dotnet restore $env:Wap_Project_Path
         - name: Build
           run: dotnet build $env:Wap_Project_Path
-        - name: Test with the dotnet CLI
-          run: dotnet test $env:Test_Project_Path --logger trx --results-directory $env:test_result_path
- # Using the trx-parser action
-        - name: trx-parser
-          uses: NasAmin/trx-parser@v0.2.0
-          id: trx-parser
-          with:
-            TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
         - name: Publish
           run: dotnet publish $env:Wap_Project_Path         
         - name: Upload WebApp Build Artifact
@@ -66,7 +58,7 @@ jobs:
 
       env:
           AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
-          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
+          AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/'      # set this to the path to your web app project, defaults to the repository root
       
       steps:
         - name: 'Deploy to Azure WebApp'
