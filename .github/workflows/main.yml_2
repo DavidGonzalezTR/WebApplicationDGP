@@ -1,0 +1,118 @@
+# This is a basic workflow to help you get started with Actions
+# run: dotnet test $env:Test_Project_Path --no-restore --logger trx --results-directory "TestResults-${{ matrix.dotnet-version }}"
+
+name: WorkFlow CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+      strategy:
+        matrix:
+          dotnet-version: [ '3.1.x' ]
+          type: [unitarias]
+      runs-on: windows-latest
+      
+      env:
+          Solution_Name: src\WebApplicationDGP.sln
+          Test_Project_Path: src\TestProject1\TestProject1.csproj       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.      
+          Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj                  # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+          working_directory: src\WebApplicationDGP
+          test_result_path: src\TestProject1\TestResults
+          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
+          AZURE_WEBAPP_PACKAGE_PATH: 'src\WebApplicationDGP\bin\Debug\netcoreapp3.1\publish\'      # set this to the path to your web app project, defaults to the repository root
+          
+
+          
+      steps:
+        - uses: actions/checkout@v2
+        - name: Setup dotnet
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: '3.1.x'
+        - name: Install dependencies
+          run: dotnet restore $env:Wap_Project_Path
+        - name: Build
+          run: dotnet build $env:Wap_Project_Path
+  testCore:
+
+      runs-on: windows-latest
+      needs: build
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject1\TestProject1.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ArtifactGenerate:
+      runs-on: windows-latest
+      needs: [build,testCore]
+      env:
+          Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj  
+      steps:
+        - uses: actions/checkout@v2
+        - name: Publish
+          run: dotnet publish $env:Wap_Project_Path     
+        - name: Upload WebApp Build Artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: WebAppDGP
+            path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
+  DelpoyToDEV:
+      runs-on: windows-latest
+      needs: ArtifactGenerate
+      env:
+          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
+          AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+      steps:
+        - uses: actions/checkout@v2
+        - name: 'Deploy to Azure WebApp'
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
+            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
+            package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/src/WebApplicationDGP'
+
+            
+  testFuncionales:
+
+      runs-on: windows-latest
+      needs: DelpoyToDEV
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
+  DelpoyToQA:
+      runs-on: windows-latest
+      needs: [DelpoyToDEV,testFuncionales]
+      env:
+          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-qa-app   # set this to your application's name
+          AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+      steps:
+        - uses: actions/checkout@v2
+        - name: 'Deploy to Azure WebApp'
+          uses: azure/webapps-deploy@v2
+          with:
+            app-name: ${{ env.AZURE_WEBAPP_NAME_QA }}
+            publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_QA }}
+            package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/src/WebApplicationDGP'
