@@ -1,28 +1,27 @@
+name: "pre-release"
+
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: '*'
-  pull_request:
-    branches: '*'
+    branches:
+      - "master"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-#    if: github.event.pull_request.merged && startsWith(github.head_ref, 'RC')
-    if: contains(github.event.head_commit.message, 'RC')
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
     steps:
-      - uses: actions/checkout@master
-      - name: Tag and prepare release
-        id: tag_and_prepare_release
-        uses: K-Phoen/semver-release-action@master
+      # ...
+      - name: "Build & test"
+        run: |
+          echo "done!"
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          release_branch: main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload release notes
-        if: steps.tag_and_prepare_release.outputs.tag
-        uses: Roang-zero1/github-create-release-action@master
-        with:
-          created_tag: ${{ steps.tag_and_prepare_release.outputs.tag }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "Development Build"
+          files: |
+            LICENSE.txt
+            *.jar
