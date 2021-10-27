@@ -1,1 +1,3 @@
-Hemos realizado un nuevo cambio en este fichero
+Hemos cambiado el contenido de este fichero
+Modificado v1.2
+
