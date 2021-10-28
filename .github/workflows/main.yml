@@ -67,7 +67,9 @@ jobs:
       steps:
         - uses: actions/checkout@v2
         - name: Publish
-          run: dotnet publish $env:Wap_Project_Path     
+          run: dotnet publish $env:Wap_Project_Path
+        - name: Show Branch NAME  
+          run: echo ${{github.ref}}
         - name: Upload WebApp Build Artifact
           uses: actions/upload-artifact@v2
           with:
