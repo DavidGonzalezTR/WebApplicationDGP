@@ -296,7 +296,7 @@ jobs:
     
       runs-on: windows-latest
       environment: PRO
-      needs: [DeployQA,TestFuncionalesQA]
+      needs: [DeployPRE,TestCorePRE]
       if: success() && github.ref == 'refs/heads/main'
 
       env:
