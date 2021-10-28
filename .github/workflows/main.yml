@@ -7,12 +7,9 @@ name: WorkFlow CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches:
-      - '*'
-      - '!main'
+    branches: '*'
   pull_request:
-    branches:
-      - main
+    branches: '*'
 
 jobs:
 ##############################################################################################################################################################################################
@@ -208,7 +205,7 @@ jobs:
       runs-on: windows-latest
       environment: QA
       needs: [ArtifactGenerate]
-      if: success() && github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main'
 
       env:
           AZURE_WEBAPP_NAME_QA: uksouth-iflx-shar-WebApplicationDGP-qa-app   # set this to your application's name
