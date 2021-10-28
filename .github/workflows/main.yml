@@ -12,6 +12,7 @@ on:
     branches: '*'
 
 jobs:
+##############################################################################################################################################################################################
   build:
       strategy:
         matrix:
@@ -40,7 +41,8 @@ jobs:
           run: dotnet restore $env:Wap_Project_Path
         - name: Build
           run: dotnet build $env:Wap_Project_Path
-  testCore:
+##############################################################################################################################################################################################          
+  TestUnitarios:
 
       runs-on: windows-latest
       needs: build
@@ -56,6 +58,7 @@ jobs:
           with:
             TRX_PATH: ${{ github.workspace }}/src/TestProject1/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+##############################################################################################################################################################################################            
   ArtifactGenerate:
       runs-on: windows-latest
       needs: [build,testCore]
@@ -70,11 +73,13 @@ jobs:
           with:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
-  DeployDEV:
+##############################################################################################################################################################################################
+  DeployDEVSKY:
     
       runs-on: windows-latest
-      environment: DEV
+      environment: DEVSKY
       needs: ArtifactGenerate
+      if: success() && github.ref == 'refs/heads/111111'
 
       env:
           AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
@@ -96,11 +101,11 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-            
-  testFuncionales:
+##############################################################################################################################################################################################            
+  SmokeTestDEVSKY:
 
       runs-on: windows-latest
-      needs: DeployDEV
+      needs: DeployDEVSKY
 
       steps:
         - uses: actions/checkout@v2
@@ -112,8 +117,89 @@ jobs:
           id: trx-parser
           with:
             TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
 
+##############################################################################################################################################################################################
+  TestBugStoryDEVSKY:
+
+      runs-on: windows-latest
+      needs: DeployDEVSKY
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
+##############################################################################################################################################################################################
+  DeployDEVGREEN:
+    
+      runs-on: windows-latest
+      environment: DEVGREEN
+      needs: ArtifactGenerate
+      if: success() && github.ref == 'refs/heads/222222'
+
+      env:
+          AZURE_WEBAPP_NAME_DEV: uksouth-iflx-shar-WebApplicationDGP-dev-app   # set this to your application's name
+          AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/path/to/artifact/'      # set this to the path to your web app project, defaults to the repository root
+      
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: DownloadArtifact
+        uses: actions/download-artifact@v2
+        with:
+          name: WebAppDGP
+          path: src/WebApplicationDGP/path/to/artifact
+
+      - name: 'Deploy to Azure WebApp'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME_DEV }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+##############################################################################################################################################################################################            
+  SmokeTestDEVGREEN:
+
+      runs-on: windows-latest
+      needs: DeployDEVGREEN
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
+##############################################################################################################################################################################################
+        
+  TestBugStoryDEVGREEN:
+
+      runs-on: windows-latest
+      needs: DeployDEVGREEN
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}           
+##############################################################################################################################################################################################
   DeployQA:
     
       runs-on: windows-latest
@@ -141,7 +227,25 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME_QA }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_QA }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+##############################################################################################################################################################################################
+        
+  TestFuncionalesQA:
 
+      runs-on: windows-latest
+      needs: [DeployQA, TestFuncionalesQA]
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}                     
+##############################################################################################################################################################################################
   DeployPRE:
     
       runs-on: windows-latest
@@ -169,3 +273,22 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME_QA }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_QA }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+##############################################################################################################################################################################################
+        
+  TestCore:
+
+      runs-on: windows-latest
+      needs: DeployPRE
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Test with the dotnet CLI
+          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+ # Using the trx-parser action
+        - name: trx-parser
+          uses: NasAmin/trx-parser@v0.2.0
+          id: trx-parser
+          with:
+            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}                     
+##############################################################################################################################################################################################
