@@ -208,7 +208,7 @@ jobs:
       runs-on: windows-latest
       environment: QA
       needs: [ArtifactGenerate]
-      if: success() && github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main'
 
       env:
           AZURE_WEBAPP_NAME_QA: uksouth-iflx-shar-WebApplicationDGP-qa-app   # set this to your application's name
