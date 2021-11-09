@@ -30,5 +30,6 @@ jobs:
           echo ${{ steps.tag_version.outputs.new_tag }}
           echo BODY:
           echo ${{ steps.tag_version.outputs.changelog }}
+          echo "Commit messaje: ${{ github.event.head_commit.message }}
 
 #https://github.com/marketplace/actions/github-tag
