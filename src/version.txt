@@ -1,2 +1,2 @@
 version=1.51.1
-#fix(pencil): stop graphite breaking when too much pressure applied
+fix(pencil): stop graphite breaking when too much pressure applied
