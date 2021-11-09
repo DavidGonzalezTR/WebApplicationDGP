@@ -20,5 +20,5 @@ jobs:
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         strategy: regex # Optional since regex_pattern is defined
-        root: "my.file"
+        root: "src\my.file"
         regex_pattern: "version=([0-9/.])"
