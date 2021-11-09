@@ -16,7 +16,7 @@ jobs:
     #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     #     strategy: package
     #    # root: "/path/to/subdirectory"
-    - uses: butlerlogic/action-autotag@1.0.0
+    - uses: ButlerLogic/action-autotag@1.1.1
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         strategy: regex # Optional since regex_pattern is defined
