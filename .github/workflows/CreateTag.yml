@@ -12,6 +12,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: butlerlogic/action-autotag@stable
+      # with:
+      #   GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      #   strategy: package
+      #  # root: "/path/to/subdirectory"
+      #  - uses: butlerlogic/action-autotag@1.0.0
       with:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        strategy: package
+        strategy: regex # Optional since regex_pattern is defined
+        root: "my.file"
+        regex_pattern: "version=([0-9\.])"
