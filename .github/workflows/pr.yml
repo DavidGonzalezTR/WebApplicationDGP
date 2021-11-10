@@ -1,56 +1,30 @@
-name: Sample Workflow
+name: Slack Pull Request Open Notification
 
 on:
-  push:
   pull_request:
+    types: [opened, reopened]
 
 jobs:
-  pre_ci:
-    name: Prepare CI environment
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Project
-        uses: actions/checkout@v2
-        with:
-          # We need to fetch with a depth of 2 for pull_request so we can do HEAD^2
-          fetch-depth: 2
-
-        # If this workflow was triggered by a push then resolve the commit message from HEAD
-        # It is stored in output steps, to be referenced with ${{ steps.push_get_commit_message.outputs.push_commit_message }}
-      - name: "[Push] Get commit message"
-        if: github.event_name == 'push'
-        id: push_get_commit_message
-        run:
-          echo "::set-output name=push_commit_message::$(git log --format=%B -n 1 HEAD)"
-
-        # If this workflow was triggered by a pull request (open or synchronize!) then resolve the commit message from HEAD^2
-        # It is stored in output steps, to be referenced with ${{ steps.pr_get_commit_message.outputs.pr_commit_message }}
-      - name: "[Pull Request] Get commit message"
-        if: github.event_name == 'pull_request'
-        id: pr_get_commit_message
-        run: echo "::set-output name=pr_commit_message::$(git log --format=%B -n 1 HEAD^2)"
-
-    # Finally we want to make the commit message available to other jobs. This can be done with job-level outputs
-    # However as we do not know whether the commit message was set in Push or Pull Request event we need to do some
-    # bash magic to resolve the one or the other
-    #
-    # For **Pull Request** events this will resolve to something like "$( [ -z "commit message pr" ] && echo "" || echo "commit message pr" )" which then resolves to just "commit message pr"
-    #
-    # For **Push** events this will resolve to something like "$( [ -z "" ] && echo "commit message push"  || echo "" )" which then resolves to just "commit message push"
-    outputs:
-      commit_message: $( [ -z "${{ steps.pr_get_commit_message.outputs.pr_commit_message }}" ] && echo "${{ steps.push_get_commit_message.outputs.push_commit_message }}" || echo "${{ steps.pr_get_commit_message.outputs.pr_commit_message }}" )
-
-  # This job can be skipped by including [skip ci] in the commit message
-  skippable_job:
-    name: Skippable Job
-    runs-on: ubuntu-latest
-    if: "!contains(needs.pre_ci.outputs.commit_message, '[skip ci]')"
-    needs: pre_ci
-    steps:
-      - name: Checkout Project
-        uses: actions/checkout@v2
-
-        # If this job doesn't get skipped you'll see the commit message appear here, it's just a debugging this
-        # so be sure to remove it for your actual workflow
-      - name: Log commit message
-        run: echo "${{ needs.pre_ci.outputs.commit_message }}"
+    - name: Notify slack pr open
+      env: 
+        SLACK_WEBHOOK_URL : ${{ secrets.SLACK_WEBHOOK_URL }}
+        PULL_REQUEST_NUMBER : ${{ github.event.pull_request.number }}
+        PULL_REQUEST_TITLE : ${{ github.event.pull_request.title }}
+        PULL_REQUEST_AUTHOR_NAME : ${{ github.event.pull_request.user.login }}
+        PULL_REQUEST_AUTHOR_ICON_URL : ${{ github.event.pull_request.user.avatar_url }}
+        PULL_REQUEST_URL : ${{ github.event.pull_request.html_url }}
+        PULL_REQUEST_BODY : ${{ github.event.pull_request.body }}
+        PULL_REQUEST_COMPARE_BRANCH_OWNER: ${{ github.event.pull_request.head.repo.owner.login }}
+        PULL_REQUEST_COMPARE_BRANCH_NAME : ${{ github.event.pull_request.head.ref }}
+        PULL_REQUEST_BASE_BRANCH_OWNER: ${{ github.event.pull_request.base.repo.owner.login }}
+        PULL_REQUEST_BASE_BRANCH_NAME : ${{ github.event.pull_request.base.ref }}
+        IS_SEND_HERE_MENTION : true
+        MAKE_PRETTY : false
+        MAKE_COMPACT : false
+        IS_PR_FROM_FORK: false
+        SEND_USER_ID_MENTIONS : ABCDE12345,AAABBBCCCC
+        SEND_GROUP_ID_MENTIONS : GROUPIDDDD,GGGGROUPID
+      uses: jun3453/slack-pr-open-notification-action@v1.3.0
