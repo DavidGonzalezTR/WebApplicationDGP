@@ -1,1 +1,3 @@
 Nueva funcionalidad 2 esto es nuevo
+
+[minor] otra prueba mas
