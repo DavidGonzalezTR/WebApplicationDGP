@@ -5,7 +5,8 @@ on:
     branches:
       - main
 env:
-    commit_message: ${{ github.event.head_commit.message }}      
+    commit_message: ${{ github.event.head_commit.message }}
+    $commit_pattern: patch
 jobs:
   TagGenerationjob:
     runs-on: ubuntu-latest
@@ -20,7 +21,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: ${{ steps.$commit_pattern }}
+          default_bump: $env:$commit_pattern
       # - name: Create a GitHub release
       #   uses: ncipollo/release-action@v1
       #   with:
