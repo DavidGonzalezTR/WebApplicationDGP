@@ -1,15 +1,36 @@
-name: Pull request - Build
-on: 
-  pull_request:
-    branches:
-        - main
-jobs:
-  PRCheck:
-    runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v1
+name: Build
+on: [push, pull_request]
 
-      - name: Lint pull request title
-        uses: secretcompany/myactions/commitlint@v0
-        with: 
-          message: ${{ github.event.pull_request.title }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+    # We need to fetch more than one commit to be able to access HEAD^2 in case
+    # of a pull request
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 10
+
+    # In case of a push event, the commit we care about is simply HEAD.
+    # The current branch name can be found by parsing GITHUB_REF, for example,
+    # if we are on the master branch, then GITHUB_REF = refs/heads/master.
+    - name: Get commit branch and commit message
+      if: github.event_name == 'push'
+      run: |
+        echo "COMMIT_BRANCH=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
+        echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+        echo "$(git log --format=%B -n 1 HEAD)" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
+    # In case of a pull_request event, the commit we care about is HEAD^2, that
+    # is, the second parent of the pull request merge commit.
+    # The current branch name is directly given by GITHUB_HEAD_REF
+    - name: Get commit branch and commit message
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "COMMIT_BRANCH=$GITHUB_HEAD_REF" >> $GITHUB_ENV
+        echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
+        echo "$(git log --format=%B -n 1 HEAD^2)" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
