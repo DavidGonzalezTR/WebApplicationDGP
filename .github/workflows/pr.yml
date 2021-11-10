@@ -1,36 +1,56 @@
-name: Build
-on: [push, pull_request]
+name: Sample Workflow
+
+on:
+  push:
+  pull_request:
 
 jobs:
-  build:
+  pre_ci:
+    name: Prepare CI environment
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+        with:
+          # We need to fetch with a depth of 2 for pull_request so we can do HEAD^2
+          fetch-depth: 2
 
-    # We need to fetch more than one commit to be able to access HEAD^2 in case
-    # of a pull request
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 10
+        # If this workflow was triggered by a push then resolve the commit message from HEAD
+        # It is stored in output steps, to be referenced with ${{ steps.push_get_commit_message.outputs.push_commit_message }}
+      - name: "[Push] Get commit message"
+        if: github.event_name == 'push'
+        id: push_get_commit_message
+        run:
+          echo ::set-output name=push_commit_message::$(git log --format=%B -n 1 HEAD)
 
-    # In case of a push event, the commit we care about is simply HEAD.
-    # The current branch name can be found by parsing GITHUB_REF, for example,
-    # if we are on the master branch, then GITHUB_REF = refs/heads/master.
-    - name: Get commit branch and commit message
-      if: github.event_name == 'push'
-      run: |
-        echo "COMMIT_BRANCH=$(echo ${GITHUB_REF##*/})" >> $GITHUB_ENV
-        echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
-        echo "$(git log --format=%B -n 1 HEAD)" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+        # If this workflow was triggered by a pull request (open or synchronize!) then resolve the commit message from HEAD^2
+        # It is stored in output steps, to be referenced with ${{ steps.pr_get_commit_message.outputs.pr_commit_message }}
+      - name: "[Pull Request] Get commit message"
+        if: github.event_name == 'pull_request'
+        id: pr_get_commit_message
+        run: echo ::set-output name=pr_commit_message::$(git log --format=%B -n 1 HEAD^2)
 
-    # In case of a pull_request event, the commit we care about is HEAD^2, that
-    # is, the second parent of the pull request merge commit.
-    # The current branch name is directly given by GITHUB_HEAD_REF
-    - name: Get commit branch and commit message
-      if: github.event_name == 'pull_request'
-      run: |
-        echo "COMMIT_BRANCH=$GITHUB_HEAD_REF" >> $GITHUB_ENV
-        echo "COMMIT_MESSAGE<<EOF" >> $GITHUB_ENV
-        echo "$(git log --format=%B -n 1 HEAD^2)" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+    # Finally we want to make the commit message available to other jobs. This can be done with job-level outputs
+    # However as we do not know whether the commit message was set in Push or Pull Request event we need to do some
+    # bash magic to resolve the one or the other
+    #
+    # For **Pull Request** events this will resolve to something like "$( [ -z "commit message pr" ] && echo "" || echo "commit message pr" )" which then resolves to just "commit message pr"
+    #
+    # For **Push** events this will resolve to something like "$( [ -z "" ] && echo "commit message push"  || echo "" )" which then resolves to just "commit message push"
+    outputs:
+      commit_message: $( [ -z "${{ steps.pr_get_commit_message.outputs.pr_commit_message }}" ] && echo "${{ steps.push_get_commit_message.outputs.push_commit_message }}" || echo "${{ steps.pr_get_commit_message.outputs.pr_commit_message }}" )
 
+  # This job can be skipped by including [skip ci] in the commit message
+  skippable_job:
+    name: Skippable Job
+    runs-on: ubuntu-latest
+    if: "!contains(needs.pre_ci.outputs.commit_message, '[skip ci]')"
+    needs: pre_ci
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v2
+
+        # If this job doesn't get skipped you'll see the commit message appear here, it's just a debugging this
+        # so be sure to remove it for your actual workflow
+      - name: Log commit message
+        run: echo "${{ needs.pre_ci.outputs.commit_message }}"
