@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set env
+      - name: Find Version Type
         run: echo "commit_pattern=$(echo ${{ github.event.head_commit.message }} | cut -c 1-6)" >> $GITHUB_ENV
-      - name: Test
+      - name: Print Version Type
         run: echo $commit_pattern
       
       - name: Bump version and push tag
@@ -23,7 +23,6 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-                  
           
           #default_bump: ${{ github.event.head_commit.message }}
       # - name: Create a GitHub release
