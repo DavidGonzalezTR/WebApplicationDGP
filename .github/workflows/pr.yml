@@ -2,8 +2,8 @@ name: Pull request - Build
 on: 
   pull_request:
     branches:
-        - master
-  commitlint: 
+        - main
+  check_run: 
     runs-on: ubuntu-latest
     steps: 
       - uses: actions/checkout@v1
