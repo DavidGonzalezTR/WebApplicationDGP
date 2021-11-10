@@ -1,4 +1,4 @@
-#     
+#
 name: TagGeneration
 on:
   push:
