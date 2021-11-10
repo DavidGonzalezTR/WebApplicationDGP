@@ -16,7 +16,7 @@ jobs:
       - name: Set output1
         run: |
           echo pull_requesttitle:
-          ${{ github.event.pull_request.title }}
+          echo: ${{ github.event.pull_request.title }}
           
           
       - name: echo Head Commit message
