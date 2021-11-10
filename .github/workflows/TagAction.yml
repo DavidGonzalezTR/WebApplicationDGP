@@ -6,7 +6,8 @@ on:
       - main
 env:
     commit_message: ${{ github.event.head_commit.message }}
-    #$commit_pattern: patch
+    PULL_REQUEST_TITLE : ${{ github.event.pull_request.title }}
+
 jobs:
   TagGenerationjob:
     runs-on: ubuntu-latest
@@ -15,8 +16,8 @@ jobs:
       
       - name: Set output1
         run: |
-          echo pull_requesttitle:
-          echo: ${{ github.event.pull_request.title }}
+          echo PULL_REQUEST_TITLE:
+          echo: $env:PULL_REQUEST_TITLE
           
           
       - name: echo Head Commit message
