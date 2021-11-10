@@ -21,7 +21,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           #default_bump: $commit_pattern
-          default_bump: ${{ github.event.head_commit.message }}
+          default_bump: minor
       # - name: Create a GitHub release
       #   uses: ncipollo/release-action@v1
       #   with:
