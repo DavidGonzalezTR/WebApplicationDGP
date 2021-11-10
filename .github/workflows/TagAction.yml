@@ -13,16 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Set output
+      - name: Set output1
         run: |
-          echo TAG:
-          echo ${{ steps.tag_version.outputs.new_tag }}
-          echo RELEASE:
-          echo ${{ steps.tag_version.outputs.new_tag }}
-          echo changelog:
-          echo ${{ steps.tag_version.outputs.changelog }}
-          echo Commit:
-          echo ${{ github.event.head_commit.message }}
           echo pull_requesttitle:
           ${{ github.event.pull_request.title }}
           
@@ -52,6 +44,15 @@ jobs:
       #     name: Release ${{ steps.tag_version.outputs.new_tag }}
       #     body: ${{ steps.tag_version.outputs.changelog }}
           
-
+      - name: Set output2
+        run: |
+          echo TAG:
+          echo ${{ steps.tag_version.outputs.new_tag }}
+          echo RELEASE:
+          echo ${{ steps.tag_version.outputs.new_tag }}
+          echo changelog:
+          echo ${{ steps.tag_version.outputs.changelog }}
+          echo Commit:
+          echo ${{ github.event.head_commit.message }}
 
 #https://github.com/marketplace/actions/github-tag
