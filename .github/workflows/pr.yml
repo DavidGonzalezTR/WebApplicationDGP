@@ -1,0 +1,14 @@
+name: Pull request - Build
+on: 
+  pull_request:
+    branches:
+        - master
+  commitlint: 
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v1
+
+      - name: Lint pull request title
+        uses: secretcompany/myactions/commitlint@v0
+        with: 
+          message: ${{ github.event.pull_request.title }}
