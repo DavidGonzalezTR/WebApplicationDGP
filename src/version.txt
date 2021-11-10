@@ -1,3 +1,2 @@
 version=1.51.1
-
-feat(pencil):remove graphiteWidth option2
+Hemos corregido este archivo
