@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+env:
+    commit_message: ${{ github.event.head_commit.message }}      
 jobs:
   TagGenerationjob:
     runs-on: ubuntu-latest
