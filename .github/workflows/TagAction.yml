@@ -14,7 +14,8 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_bump: major
+          #Vamos a buscar las cadenas [mayor] o [minor] en el commit
+          default_bump: ${{ github.event.head_commit.message }}
       # - name: Create a GitHub release
       #   uses: ncipollo/release-action@v1
       #   with:
