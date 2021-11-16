@@ -6,7 +6,6 @@ on:
       - main
 env:
     commit_message: ${{ github.event.head_commit.message }}
-    PULL_REQUEST_TITLE : ${{ github.event.pull_request.title }}
 
 jobs:
   TagGenerationjob:
