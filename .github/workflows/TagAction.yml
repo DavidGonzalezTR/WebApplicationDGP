@@ -6,7 +6,7 @@ on:
       - main
 env:
     commit_message: ${{ github.event.head_commit.message }}
-    commit_pattern: patch
+    commit_pattern: "feat(forms): change prueba5"
 jobs:
   TagGenerationjob:
     runs-on: ubuntu-latest
