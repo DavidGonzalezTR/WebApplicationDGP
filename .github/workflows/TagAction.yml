@@ -1,4 +1,4 @@
-#      patch
+#      patch [minor] version nueva
 name: TagGeneration
 on:
   push:
