@@ -30,7 +30,8 @@ jobs:
       - name: echo Head Commit message
         run:  echo ${{ github.event.head_commit.message }}
       - name: Find Version Type
-        run: echo "commit_pattern=$(echo ${{ github.event.head_commit.message }} | cut -c 2-6)" >> $GITHUB_ENV
+        #run: echo "commit_pattern=$(echo ${{ github.event.head_commit.message }} | cut -c 2-6)" >> $GITHUB_ENV
+        run: echo "commit_pattern=$(echo ${{ github.event.head_commit.message }}" >> $GITHUB_ENV
       #   id: commit_pattern_id
       #   run: echo "::set-output name=commit_pattern::$(echo ${{ github.event.head_commit.message }} | cut -c 2-6)"
       # - name: Print Version Type
