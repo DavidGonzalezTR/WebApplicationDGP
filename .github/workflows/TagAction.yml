@@ -6,7 +6,7 @@ on:
       - main
 env:
     commit_message: ${{ github.event.head_commit.message }}
-    #$commit_pattern: patch
+    commit_pattern: patch
 jobs:
   TagGenerationjob:
     runs-on: ubuntu-latest
@@ -15,12 +15,6 @@ jobs:
 
       - name: Set output
         run: |
-          echo TAG:
-          echo ${{ steps.tag_version.outputs.new_tag }}
-          echo RELEASE:
-          echo ${{ steps.tag_version.outputs.new_tag }}
-          echo changelog:
-          echo ${{ steps.tag_version.outputs.changelog }}
           echo Commit:
           echo ${{ github.event.head_commit.message }}
 
