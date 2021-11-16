@@ -23,8 +23,7 @@ jobs:
           echo ${{ steps.tag_version.outputs.changelog }}
           echo Commit:
           echo ${{ github.event.head_commit.message }}
-          echo pull_requesttitle:
-          ${{ github.event.pull_request.title }}
+
           
           
       - name: echo Head Commit message
