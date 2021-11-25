@@ -240,6 +240,7 @@ jobs:
           
       - name: 'Set Environment'
         run: |
+          timeout 60
           dir D:\a\WebApplicationDGP\WebApplicationDGP\src\WebApplicationDGP\path\to\artifact
           cd D:\a\WebApplicationDGP\WebApplicationDGP\src\WebApplicationDGP\path\to\artifact\
           type appsettings_QA.json > appsettings.json
@@ -274,7 +275,6 @@ jobs:
     
       runs-on: windows-latest
       environment: PRE
-      concurrency: PRE
       needs: [DeployQA,TestFuncionalesQA]
       if: success() && github.ref == 'refs/heads/main'
 
@@ -328,7 +328,6 @@ jobs:
     
       runs-on: windows-latest
       environment: PRO
-      concurrency: PRO
       needs: [DeployPRE,TestCorePRE]
       if: success() && github.ref == 'refs/heads/main'
 
