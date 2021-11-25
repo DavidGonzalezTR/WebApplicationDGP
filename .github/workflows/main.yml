@@ -229,6 +229,13 @@ jobs:
           AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/path/to/artifact/'      # set this to the path to your web app project, defaults to the repository root
       
       steps:
+      
+      - name: Sleep for 30s
+        uses: juliangruber/sleep-action@v1
+        with:
+          time: 30s
+      
+      
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -240,7 +247,6 @@ jobs:
           
       - name: 'Set Environment'
         run: |
-          timeout 60
           dir D:\a\WebApplicationDGP\WebApplicationDGP\src\WebApplicationDGP\path\to\artifact
           cd D:\a\WebApplicationDGP\WebApplicationDGP\src\WebApplicationDGP\path\to\artifact\
           type appsettings_QA.json > appsettings.json
