@@ -220,6 +220,7 @@ jobs:
     
       runs-on: windows-latest
       environment: QA
+      concurrency: QA
       needs: [ArtifactGenerate]
       if: github.ref == 'refs/heads/main'
 
@@ -273,6 +274,7 @@ jobs:
     
       runs-on: windows-latest
       environment: PRE
+      concurrency: PRE
       needs: [DeployQA,TestFuncionalesQA]
       if: success() && github.ref == 'refs/heads/main'
 
@@ -326,6 +328,7 @@ jobs:
     
       runs-on: windows-latest
       environment: PRO
+      concurrency: PRO
       needs: [DeployPRE,TestCorePRE]
       if: success() && github.ref == 'refs/heads/main'
 
