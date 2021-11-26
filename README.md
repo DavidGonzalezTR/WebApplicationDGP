@@ -10,4 +10,3 @@ Entorno= DEVGREEN
 
 ![WorkFlow CI](https://github.com/DavidGonzalezTR/WebApplicationDGP/actions/workflows/main.yml/badge.svg)
 
-[![Manual Deploy](https://img.shields.io/badge/devblue-v2.0.0-blue)](https://github.com/DavidGonzalezTR/WebApplicationDGP/deployments?environment=PRO#activity-log)
