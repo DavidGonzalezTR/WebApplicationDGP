@@ -84,7 +84,7 @@ jobs:
 ##############################################################################################################################################################################################            
   ArtifactGenerateWithTag:
       runs-on: windows-latest
-      needs: [build,TestUnitarios]
+      needs: [TagGeneration]
       env:
           Wap_Project_Path: src\WebApplicationDGP/WebApplicationDGP.csproj  
       steps:
@@ -237,12 +237,23 @@ jobs:
             TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}                     
 ##############################################################################################################################################################################################
+##############################################################################################################################################################################################
+  CheckInfraPRO:
+
+      runs-on: windows-latest
+      needs: TestCorePRE
+
+      steps:
+
+      - name: 'Existe infra'
+        run: echo "Infra OK"
+##############################################################################################################################################################################################
   DeployPRO:
     
       runs-on: windows-latest
       environment: PRO
-      needs: [DeployPRE,TestCorePRE]
-      if: success() && github.ref == 'refs/heads/main'
+      needs: [CheckInfraPRO]
+      #if: success() && github.ref == 'refs/heads/main'
 
       env:
           AZURE_WEBAPP_NAME_QA: uksouth-iflx-shar-WebApplicationDGP-qa-app   # set this to your application's name
