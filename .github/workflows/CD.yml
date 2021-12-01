@@ -104,7 +104,7 @@ jobs:
       runs-on: windows-latest
       environment: QA
       concurrency: QualityAssurance
-      needs: DonwloadArtifactWithTag
+      needs: ArtifactGenerateWithTag
 
       steps:
 
