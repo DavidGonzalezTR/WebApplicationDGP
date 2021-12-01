@@ -291,6 +291,7 @@ jobs:
       runs-on: windows-latest
       environment: PRO
       concurrency: PRODUCTION
+      needs: [DeployPRO]
 
       steps:
         - uses: actions/checkout@v2
