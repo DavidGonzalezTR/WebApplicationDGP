@@ -99,20 +99,11 @@ jobs:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
 ##############################################################################################################################################################################################
-  DonwloadArtifactWithTag:
-
-      runs-on: windows-latest
-      needs: ArtifactGenerateWithTag
-
-      steps:
-
-      - name: 'Download Artefact'
-        run: echo "Artefact Downloaded"
-##############################################################################################################################################################################################
-##############################################################################################################################################################################################
   CheckInfraQA:
 
       runs-on: windows-latest
+      environment: QA
+      concurrency: QualityAssurance
       needs: DonwloadArtifactWithTag
 
       steps:
@@ -124,6 +115,7 @@ jobs:
     
       runs-on: windows-latest
       environment: QA
+      concurrency: QualityAssurance
       needs: [CheckInfraQA]
       #if: github.ref == 'refs/heads/main'
 
@@ -159,6 +151,8 @@ jobs:
   SmokeTestQA:
 
       runs-on: windows-latest
+      environment: QA
+      concurrency: QualityAssurance
       needs: DeployQA
 
       steps:
@@ -173,10 +167,12 @@ jobs:
             TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
             REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}                     
 ##############################################################################################################################################################################################
-##############################################################################################################################################################################################
+
   CheckInfraPRE:
 
       runs-on: windows-latest
+      environment: PRE
+      concurrency: PREPRO     
       needs: SmokeTestQA
 
       steps:
@@ -188,6 +184,7 @@ jobs:
     
       runs-on: windows-latest
       environment: PRE
+      concurrency: PREPRO
       needs: [CheckInfraPRE]
       #if: success() && github.ref == 'refs/heads/main'
 
@@ -223,6 +220,8 @@ jobs:
   TestCorePRE:
 
       runs-on: windows-latest
+      environment: PRE
+      concurrency: PREPRO      
       needs: DeployPRE
 
       steps:
@@ -241,6 +240,8 @@ jobs:
   CheckInfraPRO:
 
       runs-on: windows-latest
+      environment: PRO
+      concurrency: PRODUCTION
       needs: TestCorePRE
 
       steps:
@@ -252,6 +253,7 @@ jobs:
     
       runs-on: windows-latest
       environment: PRO
+      concurrency: PRODUCTION
       needs: [CheckInfraPRO]
       #if: success() && github.ref == 'refs/heads/main'
 
@@ -287,7 +289,8 @@ jobs:
   TestSmokePRO:
 
       runs-on: windows-latest
-      needs: DeployPRO
+      environment: PRO
+      concurrency: PRODUCTION
 
       steps:
         - uses: actions/checkout@v2
