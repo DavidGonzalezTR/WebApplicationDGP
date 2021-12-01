@@ -240,13 +240,13 @@ jobs:
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
           
-        - name: Test PRODUCTION 
-          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+      - name: Test PRODUCTION 
+        run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
  # Using the trx-parser action
-        - name: trx-parser
-          uses: NasAmin/trx-parser@v0.2.0
-          id: trx-parser
-          with:
-            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}             
+      - name: trx-parser
+        uses: NasAmin/trx-parser@v0.2.0
+        id: trx-parser
+        with:
+          TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}             
 ##############################################################################################################################################################################################
