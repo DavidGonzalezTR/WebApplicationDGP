@@ -99,24 +99,13 @@ jobs:
             name: WebAppDGP
             path: src/WebApplicationDGP/bin/Debug/netcoreapp3.1/publish/
 ##############################################################################################################################################################################################
-  CheckInfraQA:
 
-      runs-on: windows-latest
-      environment: QA
-      concurrency: QualityAssurance
-      needs: ArtifactGenerateWithTag
-
-      steps:
-
-      - name: 'Existe infra'
-        run: echo "Infra OK"
-##############################################################################################################################################################################################
-  DeployQA:
+  DeployandTestQA:
     
       runs-on: windows-latest
       environment: QA
       concurrency: QualityAssurance
-      needs: [CheckInfraQA]
+      needs: [ArtifactGenerateWithTag]
       #if: github.ref == 'refs/heads/main'
 
       env:
@@ -124,6 +113,9 @@ jobs:
           AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/path/to/artifact/'      # set this to the path to your web app project, defaults to the repository root
       
       steps:
+      - name: 'Check Infra QA'
+        run: echo "Infra OK"
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -146,46 +138,25 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME_QA }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-##############################################################################################################################################################################################
-        
-  SmokeTestQA:
-
-      runs-on: windows-latest
-      environment: QA
-      concurrency: QualityAssurance
-      needs: DeployQA
-
-      steps:
-        - uses: actions/checkout@v2
-        - name: Test with the dotnet CLI
-          run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
+      
+      - name: Smoke Test QA
+        run: dotnet test src\TestProject2\TestProject2.csproj --logger trx --results-directory src\TestProject1\TestResults
  # Using the trx-parser action
-        - name: trx-parser
-          uses: NasAmin/trx-parser@v0.2.0
-          id: trx-parser
-          with:
-            TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
-            REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}                     
-##############################################################################################################################################################################################
+      - name: trx-parser
+        uses: NasAmin/trx-parser@v0.2.0
+        id: trx-parser
+        with:
+          TRX_PATH: ${{ github.workspace }}/src/TestProject2/TestResults #This should be the path to your TRX files
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}                     
 
-  CheckInfraPRE:
 
-      runs-on: windows-latest
-      environment: PRE
-      concurrency: PREPRO     
-      needs: SmokeTestQA
-
-      steps:
-
-      - name: 'Existe infra'
-        run: echo "Infra OK"
 ##############################################################################################################################################################################################
   DeployPRE:
     
       runs-on: windows-latest
       environment: PRE
       concurrency: PREPRO
-      needs: [CheckInfraPRE]
+      needs: [DeployandTestQA]
       #if: success() && github.ref == 'refs/heads/main'
 
       env:
@@ -193,6 +164,9 @@ jobs:
           AZURE_WEBAPP_PACKAGE_PATH: 'src/WebApplicationDGP/path/to/artifact/'      # set this to the path to your web app project, defaults to the repository root
       
       steps:
+      - name: 'Check Infra PRE'
+        run: echo "Infra OK"
+
       - name: Checkout
         uses: actions/checkout@v2
 
