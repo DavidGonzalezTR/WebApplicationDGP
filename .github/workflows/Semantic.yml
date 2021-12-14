@@ -75,7 +75,7 @@ jobs:
       runs-on: ubuntu-latest
       outputs:
         Package_version: ${{ steps.tag_version.outputs.new_tag }}
-      needs: [ValidateMessage,create-variables,build]
+      needs: [ValidateMessage,create-variables]
       # Steps represent a sequence of tasks that will be executed as part of the job    
       steps:
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
