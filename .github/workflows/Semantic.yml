@@ -43,7 +43,7 @@ jobs:
           id: CommitMSG
           uses: AsasInnab/regex-action@v1
           with:
-            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test)(\((\w{0,15})\))?(\: .*\S.*)'
+            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test|revert)(\((\w{0,15})\))?(\: .*\S.*)'
             regex_flags: 'gim'
             search_string: ${{ needs.create-variables.outputs.cmessage }}        
         - name: Echo commit MSG
@@ -59,7 +59,7 @@ jobs:
           id: CommitMSGtype
           uses: AsasInnab/regex-action@v1
           with:
-            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test)'
+            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test|revert)'
             regex_flags: 'gim'
             search_string: ${{ needs.create-variables.outputs.cmessage }}
         - name: Bump version and push tag
