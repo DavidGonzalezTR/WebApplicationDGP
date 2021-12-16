@@ -46,7 +46,7 @@ jobs:
           id: CommitMSG
           uses: AsasInnab/regex-action@v1
           with:
-            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test)(\((\w{0,15})\))?(\: .*\S.*)'
+            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test|revert)(\((\w{0,15})\))?(\: .*\S.*)'
             regex_flags: 'gim'
             search_string: ${{ needs.create-variables.outputs.cmessage }}        
         - name: Echo commit MSG
@@ -62,7 +62,7 @@ jobs:
           id: CommitMSGtype
           uses: AsasInnab/regex-action@v1
           with:
-            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test)'
+            regex_pattern: '(major|minor|patch|build|build|ci|docs|feat|fix|perf|refactor|test|revert)'
             regex_flags: 'gim'
             search_string: ${{ needs.create-variables.outputs.cmessage }}
         - name: Bump version and push tag
@@ -117,6 +117,7 @@ jobs:
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
 
+
 ##############################################################################################################################################################################################            
 
   build:
@@ -125,7 +126,7 @@ jobs:
           dotnet-version: [ '3.1.x' ]
           Browser: [IE, Chrome, FireFox]
       runs-on: windows-latest
-      needs: ValidacionSemanticRelease
+      needs: Create-Label
       
       env:
           Solution_Name: src\WebApplicationDGP.sln
