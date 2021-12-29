@@ -1,0 +1,26 @@
+{
+    "autoHealEnabled": true,
+    "autoHealRules": {
+        "actions": {
+          "actionType": "Recycle",
+          "customAction": null,
+          "minProcessExecutionTime": "00:01:00"
+        },
+        "triggers": {
+          "privateBytesInKb": 0,
+          "requests": null,
+          "slowRequests": null,
+          "slowRequestsWithPath": [],
+          "statusCodes": [ {
+            "count": 3,
+            "path": "/healthcheck",
+            "status": 500,
+            "subStatus": 0,
+            "timeInterval": "00:03:00",
+            "win32Status": 0
+          }
+        ],
+          "statusCodesRange": []
+        }
+      }
+}

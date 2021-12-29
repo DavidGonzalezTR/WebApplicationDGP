@@ -1,0 +1,34 @@
+{
+  "displayName": "App Service apps should use an allowed SKU in preprod",
+  "description": "App Service apps should use an allowed SKU in preprod. This policy only allows these app services SKUs in preprod: P1V2, P1V3 and P2V3",
+  "mode": "Indexed",
+  "policyRule": {
+    "if": {
+      "allOf": [
+        {
+          "field": "type",
+          "equals": "Microsoft.Web/serverfarms"
+        },
+        {
+          "not": {
+            "field": "Microsoft.Web/serverfarms/sku.name",
+            "in": "[parameters('listOfAllowedSKUs')]"
+          }
+        }
+      ]
+    },
+    "then": {
+      "effect": "Deny"
+    }
+  },
+  "parameters": {
+    "listOfAllowedSKUs": {
+      "type": "Array",
+      "metadata": {
+        "displayName": "Allowed SKUs",
+        "description": "The list of SKUs that can be specified"
+      },
+      "defaultValue": ["P1v2", "P1v3", "P2v3"]
+    }
+  }
+}

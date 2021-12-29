@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "displayName": "Only allow standard elastic pools to be created",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "This Policy will only allow standard elastic pools to be created",
+    "parameters": {},
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Sql/servers/elasticPools"
+          },
+
+          {
+            "not": {
+              "field": "Microsoft.Sql/servers/elasticpools/sku.tier",
+              "equals": "Standard"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}
