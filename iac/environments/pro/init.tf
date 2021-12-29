@@ -15,6 +15,6 @@ terraform {
     resource_group_name  = "uksouth-iflx-shar-qa-rg"
     storage_account_name = "infolexterraformstateqa"
     container_name       = "terraform-state"
-    key                  = "terraform.tfstate.POC_ADO_PRO"
+    key                  = "terraform.tfstate.POC_ADO"
   }
 }
