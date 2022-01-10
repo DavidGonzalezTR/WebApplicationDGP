@@ -12,7 +12,7 @@ jobs:
 - deployment: VMDeploy
   displayName: Deploy to VM
   environment: 
-    name: admindevblue
+    name: dev
     resourceType: VirtualMachine
     tags: admindevblue # only deploy to virtual machines with both windows and prod tags
   strategy:
