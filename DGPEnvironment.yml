@@ -3,10 +3,6 @@ trigger:
 
 pool:
   name: SWF_Burgos_Spain_env
-  demands:
-  - msbuild
-  - visualstudio
-  - vstest
 
 jobs:
 - deployment: VMDeploy
@@ -14,7 +10,7 @@ jobs:
   environment: 
     name: dev
     resourceType: VirtualMachine
-    tags: admindevblue # only deploy to virtual machines with both windows and prod tags
+    tags: dev # only deploy to virtual machines with both windows and prod tags
   strategy:
     runOnce:
       deploy:   
