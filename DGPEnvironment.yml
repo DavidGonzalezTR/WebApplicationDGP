@@ -25,10 +25,12 @@ jobs:
               displayName: 'NuGet restore'
               inputs:
                 restoreSolution: '$(Parameters.solution)'
-            - task: VSBuild@1
-              displayName: 'Build solution'
+                
+            - task: VSTest@2
+              displayName: 'Test Unitarios'
               inputs:
-                solution: '$(Parameters.solution)'
-                msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+                testAssemblyVer2: |
+                 **\$(BuildConfiguration)\*test*.dll
+                 !**\obj\**
                 platform: '$(BuildPlatform)'
-                configuration: '$(BuildConfiguration)'                
+                configuration: '$(BuildConfiguration)'           
