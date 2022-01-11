@@ -16,3 +16,7 @@ jobs:
           steps:
             - script: echo "Hello world"
             - script: hostname
+            - powershell: |
+               Write-Host "Hello World"
+               $last_tag = & 'git' 'describe' '--tags' '--abbrev=0'
+               Write-Host "Version is $($last_tag)"
