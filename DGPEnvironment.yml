@@ -20,15 +20,75 @@ jobs:
      runOnce:
         deploy:   
           steps:
-            - script: echo "Hello world"
-            - script: hostname
-            - task: NuGetToolInstaller@0
-              displayName: 'Use NuGet 4.4.1'
-              inputs:
-                versionSpec: 4.4.1
+          steps:
+          - script: echo "Hello world"
+          - script: hostname
+          - checkout: self
+            clean: true
+          - task: PowerShell@2
+            displayName: Git Tags
+            inputs:
+              targetType: inline
+              script: >-
+                Write-Host "Hello World"
 
-            - task: NuGetCommand@2
-              displayName: 'NuGet restore'
-              inputs:
-                restoreSolution: '$(Parameters.solution)'
-  
+                $last_tag = & 'git' 'describe' '--tags' '--abbrev=0'
+
+                Write-Host "Version is $($last_tag)"
+
+
+                ##################################################
+
+
+                Set-Variable -Name "mytag" -Value "$last_tag"
+
+                Get-Variable -Name "mytag"
+          - task: DownloadGitHubRelease@0
+            displayName: Download GitHub Release
+            enabled: False
+            inputs:
+              connection: 1f02de48-1924-4f3e-8646-b70a1e38ae87
+              userRepository: DavidGonzalezTR/WebApplicationDGP
+              defaultVersionType: specificTag
+              version: v5.3.0
+          - task: NuGetToolInstaller@0
+            displayName: Use NuGet 4.4.1
+            inputs:
+              versionSpec: 4.4.1
+          - task: NuGetCommand@2
+            displayName: NuGet restore
+            inputs:
+              solution: $(BuildParameters.solution)
+          - task: VSBuild@1
+            displayName: Build solution
+            inputs:
+              solution: $(BuildParameters.solution)
+              msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"
+              platform: $(BuildPlatform)
+              configuration: $(BuildConfiguration)
+          - task: VSTest@2
+            displayName: Test Unitarios
+            inputs:
+              testAssemblyVer2: >-
+                **\$(BuildConfiguration)\*test*.dll
+
+                !**\obj\**
+              platform: $(BuildPlatform)
+              configuration: $(BuildConfiguration)
+          - task: PublishSymbols@2
+            displayName: Publish symbols path
+            continueOnError: True
+
+
+            inputs:
+              SearchPattern: '**\bin\**\*.pdb'
+              PublishSymbols: false
+              SymbolServerType: TeamServices
+          - task: PublishBuildArtifacts@1
+            displayName: Publish Artifact
+            condition: succeededOrFailed()
+            inputs:
+              PathtoPublish: $(build.artifactstagingdirectory)
+              ArtifactName: $(BuildParameters.ArtifactName)
+              TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+        ...
