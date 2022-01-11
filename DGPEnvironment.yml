@@ -20,3 +20,9 @@ jobs:
                Write-Host "Hello World"
                $last_tag = & 'git' 'describe' '--tags' '--abbrev=0'
                Write-Host "Version is $($last_tag)"
+
+               ##################################################
+
+               Set-Variable -Name "mytag" -Value "$last_tag"
+               Get-Variable -Name "mytag"
+              displayName: 'Git Tags'
