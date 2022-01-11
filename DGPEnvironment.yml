@@ -16,13 +16,19 @@ jobs:
           steps:
             - script: echo "Hello world"
             - script: hostname
-            - powershell: |
-               Write-Host "Hello World"
-               $last_tag = & 'git' 'describe' '--tags' '--abbrev=0'
-               Write-Host "Version is $($last_tag)"
+            - task: NuGetToolInstaller@0
+              displayName: 'Use NuGet 4.4.1'
+              inputs:
+                versionSpec: 4.4.1
 
-               ##################################################
-
-               Set-Variable -Name "mytag" -Value "$last_tag"
-               Get-Variable -Name "mytag"
-              displayName: 'Git Tags'
+            - task: NuGetCommand@2
+              displayName: 'NuGet restore'
+              inputs:
+                restoreSolution: '$(Parameters.solution)'
+            - task: VSBuild@1
+              displayName: 'Build solution'
+              inputs:
+                solution: '$(Parameters.solution)'
+                msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactstagingdirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+                platform: '$(BuildPlatform)'
+                configuration: '$(BuildConfiguration)'
