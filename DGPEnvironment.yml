@@ -25,12 +25,4 @@ jobs:
               displayName: 'NuGet restore'
               inputs:
                 restoreSolution: '$(Parameters.solution)'
-                
-            - task: VSTest@2
-              displayName: 'Test Unitarios'
-              inputs:
-                testAssemblyVer2: |
-                 **\$(BuildConfiguration)\*test*.dll
-                 !**\obj\**
-                platform: '$(BuildPlatform)'
-                configuration: '$(BuildConfiguration)'           
+  
