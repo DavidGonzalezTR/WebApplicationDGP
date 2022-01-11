@@ -17,9 +17,6 @@ resources:
 jobs:
 - job: Job_1
   displayName: Agent job 1
-  environment: 
-   name: dev
-   resourceType: VirtualMachine  
   pool:
     name: SWF_Burgos_Spain_env
     demands:
