@@ -20,7 +20,6 @@ jobs:
      runOnce:
         deploy:   
           steps:
-          steps:
           - script: echo "Hello world"
           - script: hostname
           - checkout: self
