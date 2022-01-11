@@ -1,18 +1,17 @@
 trigger: 
-- master
+- main
 
-pool:
-  name: SWF_Burgos_Spain_env
+pool: 
+   vmImage: ubuntu-latest
 
 jobs:
 - deployment: VMDeploy
   displayName: Deploy to VM
   environment: 
-    name: dev
-    resourceType: VirtualMachine
-    tags: dev # only deploy to virtual machines with both windows and prod tags
+   name: dev
+   resourceType: VirtualMachine
   strategy:
-    runOnce:
-      deploy:   
+     runOnce:
+        deploy:   
           steps:
-          - script: echo "Hello world"
+            - script: echo "Hello world"
