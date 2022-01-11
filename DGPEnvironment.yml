@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool: 
-   vmImage: ubuntu-latest
+   name: SWF_Burgos_Spain_env
 
 jobs:
 - deployment: VMDeploy
