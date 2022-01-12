@@ -26,6 +26,7 @@ jobs:
      runOnce:
         deploy:
           steps:
+          - script: hostname
           - checkout: self
             clean: true
           - task: PowerShell@2
