@@ -1,4 +1,4 @@
-# Variable 'mytag' was defined in the Variables tab
+# Variable 'mytag' was defined in the Variables tab 
 variables:
 - name: BuildParameters.solution
   value: '**\*.sln'
