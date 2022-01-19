@@ -29,9 +29,21 @@ module "WebApplicationDGP_app_service" {
   create_alert                = false
   #alert_action_group_id       = azurerm_monitor_action_group.module_azurerm_monitor_action_group.id
   app_settings = {
-          ANCM_ADDITIONAL_ERROR_PAGE_LINK                 = "https://uksouth-iflx-shar-WebApplicationDGP-dev-app.scm.azurewebsites.net/detectors?type=tools&name=eventviewer"
-          
-        }
+          #ANCM_ADDITIONAL_ERROR_PAGE_LINK                 = "https://uksouth-iflx-shar-WebApplicationDGP-dev-app.scm.azurewebsites.net/detectors?type=tools&name=eventviewer"
+          ANCM_ADDITIONAL_ERROR_PAGE_LINK                 = "https://uksouth-iflx-shar-auth-dev-app.scm.azurewebsites.net/detectors?type=tools&name=eventviewer"
+          APPINSIGHTS_PROFILERFEATURE_VERSION             = "1.0.0"
+          APPINSIGHTS_SNAPSHOTFEATURE_VERSION             = "1.0.0"
+          ASPNETCORE_ENVIRONMENT                          = "dev"
+          ApplicationInsightsAgent_EXTENSION_VERSION      = "~2"
+          DiagnosticServices_EXTENSION_VERSION            = "~3"
+          InstrumentationEngine_EXTENSION_VERSION         = "disabled"
+          SnapshotDebugger_EXTENSION_VERSION              = "disabled"
+          WEBSITE_LOAD_CERTIFICATES                       = "*"
+          XDT_MicrosoftApplicationInsights_BaseExtensions = "disabled"
+          XDT_MicrosoftApplicationInsights_Mode           = "recommended"
+          XDT_MicrosoftApplicationInsights_PreemptSdk     = "disabled"
+          WEBSITE_HEALTHCHECK_MAXPINGFAILURES             = "2"
+   }
   #Area Vnet Integration
   #   vnet_name = "VNet-PROD-westeurope"
   #   vnet_rg = "westeurope-service-group"
