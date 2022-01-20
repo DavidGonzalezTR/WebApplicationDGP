@@ -1,0 +1,7 @@
+steps:
+- script: echo This is the step in the template
+  displayName: Script from Template
+- script: dir
+  displayName: Dir from Template
+- script: echo Last step in the template
+  displayName: Last from Template
