@@ -5,3 +5,5 @@ steps:
   displayName: Dir from Template
 - script: echo Last step in the template
   displayName: Last from Template
+- script: echo One More step in the template
+  displayName: One More Step from Template  
