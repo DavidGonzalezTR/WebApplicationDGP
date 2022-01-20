@@ -3,13 +3,17 @@ trigger: none
 jobs:
 - job: Linux
   pool:
-    vmImage:'ubuntu-16.04'
+    name: SWF_Burgos_Spain_env
+    demands:
+    - env -equals qa2
   steps:
   - template: templates/my-steps-template.yml
 
 - job: Windows
   pool:
-    vmImage:'V52017-win2016'
+    name: SWF_Burgos_Spain_env
+    demands:
+    - env -equals qa
   steps:
   - script: echo This script runs before the template's steps, only on Windows.
     displayName: First script from Pipeline
