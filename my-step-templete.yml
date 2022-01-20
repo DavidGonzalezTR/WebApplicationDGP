@@ -20,5 +20,5 @@ jobs:
 
   - template: templates/my-steps-template.yml
 
-  - script: echo- This step runs after the template's steps.
+  - script: echo This step runs after the template's steps.
     displayName: Second-scriptfromPipeline
