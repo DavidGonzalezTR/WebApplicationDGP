@@ -5,10 +5,14 @@ jobs:
       demands:
       - env -equals qa      
     steps:
-    - bash: echo "Hello Ubuntu"
+    - script: echo Hello Ubuntu
+      displayName: Script from Template
     
   - job: Windows
     pool:
-      vmImage: 'windows-latest'
+      name: SWF_Burgos_Spain_env
+      demands:
+      - env -equals qa2  
     steps:
-    - bash: echo "Hello Windows"
+    - script: echo Hello Windows
+      displayName: Script from Template
