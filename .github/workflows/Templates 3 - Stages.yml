@@ -1,9 +1,8 @@
 trigger: none
 
 pool:
-  name: SWF_Burgos_Spain_env
-  demands:
-  - env -equals qa
+  name: ubuntu-latest
+
 
 stages:
 - stage: StagePipeline
