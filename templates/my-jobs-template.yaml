@@ -1,7 +1,9 @@
 jobs:
   - job: Ubuntu
     pool:
-      vmImage: 'ubuntu-latest'
+      name: SWF_Burgos_Spain_env
+      demands:
+      - env -equals qa2      
     steps:
     - bash: echo "Hello Ubuntu"
     

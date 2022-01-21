@@ -1,0 +1,14 @@
+trigger: none
+
+jobs:
+  - template: templates/my-jobs-template.yaml
+
+  - job: PipelineJob
+    displayName: Job From Pipeline
+    pool:
+      name: SWF_Burgos_Spain_env
+      demands:
+      - env -equals qa2
+    steps:
+    - script: echo Hello fromt the Pipeline
+      displayName: Script from Pipeline
