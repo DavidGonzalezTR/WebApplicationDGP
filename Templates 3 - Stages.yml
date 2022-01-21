@@ -1,0 +1,18 @@
+trigger: none
+
+pool:
+ vmImage: *ubuntu-latest'
+
+stages:
+- stage: StagePipeline
+  displayName: Stage from Pipeline
+  jobs:
+  - job: DotNet
+    steps:
+    - checkout: self
+      clean: true
+    - task: NuGetCommand@2
+      displayName: NuGet restore
+      inputs:
+        solution: $(BuildParameters.solution)        
+- template: templates/my-stages-template.yaml
