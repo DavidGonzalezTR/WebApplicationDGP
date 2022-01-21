@@ -3,7 +3,7 @@ jobs:
     pool:
       name: SWF_Burgos_Spain_env
       demands:
-      - env -equals qa2      
+      - env -equals qa      
     steps:
     - bash: echo "Hello Ubuntu"
     
