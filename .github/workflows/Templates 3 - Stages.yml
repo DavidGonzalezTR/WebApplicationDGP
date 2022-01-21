@@ -1,4 +1,10 @@
-trigger: none
+name: WorkFlow CI / CD
+concurrency: package
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 pool:
   name: ubuntu-latest
