@@ -1,0 +1,188 @@
+# Variable 'ConfigName' was defined in the Variables tab
+variables:
+- name: BuildParameters.solution
+  value: $(Build.Repository.LocalPath)\$(Build.DefinitionName)/ThomsonReuters.InfolexWeb/TestInfolexWeb.sln
+trigger:
+  paths:
+    include:
+    - $/SWF_Burgos_Spain/Infolex/Desarrollo/22Q4_159138
+name: $(date:yyyyMMdd)$(rev:.r)
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: $/SWF_Burgos_Spain/Infolex/Desarrollo/22Q4_159138
+lockBehavior: sequential    
+jobs:
+- job: Job_1
+  environment: dev  
+  displayName: Trabajo de agente 1
+  timeoutInMinutes: 300
+  pool:
+    name: SWF_Burgos_Spain_test
+    demands:
+    - env -equals dev
+  steps:
+  - checkout: self
+  - task: NuGetToolInstaller@0
+    displayName: Use NuGet 5.4.0
+    inputs:
+      versionSpec: 5.4.0
+  - task: NuGetCommand@2
+    displayName: NuGet restore
+    inputs:
+      solution: $(BuildParameters.solution)
+      selectOrConfig: config
+      feedRestore: /c800bdcb-5232-4f7e-965b-6f558250c9a7
+      nugetConfigPath: C:\scritpsdeploy\NuGet\NuGet.Config
+  - task: CmdLine@2
+    displayName: Command Line Script
+    enabled: False
+    inputs:
+      script: "@echo off\nsetlocal enabledelayedexpansion\nRem Buscamos todos los archivos de configuracion del entorno a remplazar en la rama \nfor /f %%a in ('dir /b /s %Build_SourcesDirectory%\\%Build_DefinitionName%\\*%ConfigNameWithExtension%  ^| findstr /V \"bin\" ') do (\nRem Inicializamos las variables\nset string= \nset rutaConfigProjecto= \nset result= \nset splitBarra= \nset namefile= \nset string= %%a\nRem obtenemos el path del config del entorno\nset rutaRelativaFuentes=!string:*Test=!\nset rutaConfigProjecto=!rutaRelativaFuentes:*Test=!\nrem echo !rutaProjecto!\nRem Separamos la ruta para buscar el nombre real del fichero\nset splitBarra=!string:\\= !\nRem Obtenemos el nombre real del fichero\nfor %%c in (!splitBarra!) do set namefile=%%c\nRem Eliminos la parte del entorno para obtener el nombre final del archivo de configuración\nset namefileDestination=!namefile:.%ConfigNameWithExtension%=.config!\nrem echo namefile:!namefileDestination!\nRem Eliminos ruta del config para obtener el path del proyecto\ncall set result=%%string:!rutaConfigProjecto!=\\%%\nRem call echo result:!result!\nset destination=!result:~1,-1!\\!namefileDestination! \nrem Eliminamos solo lectura del archivo\nattrib -r !destination!\nRem Sustituimos el config orginal por el del entorno\nrem echo destination:!destination!\ncopy !string! !destination!\nrem echo copiare!string!!destination!\n)"
+  - task: PowerShell@2
+    displayName: PowerShell Script
+    inputs:
+      filePath: C:\scritpsdeploy\PipelinesAutos\CopyConfigsPS.ps1
+      arguments: $(Build.SourcesDirectory)\$(Build.DefinitionName)  $(ConfigName)
+      script: >-
+        # Write your powershell commands here.
+
+
+        Write-Host "Hello World"
+
+
+        # Use the environment variables input below to pass secret variables to this script.
+      errorActionPreference: continue
+  - task: VSBuild@1
+    displayName: Build solution
+    inputs:
+      solution: $(BuildParameters.solution)
+      msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)"
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+      msbuildArchitecture: x64
+  - task: VSTest@2
+    displayName: Test Assemblies
+    inputs:
+      testAssemblyVer2: >-
+        **\Jurisoft.Infolex7.NegocioTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.Infolex7.NegocioTest.dll
+
+        **\Jurisoft.NegocioTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.NegocioTest.dll
+
+        **\Jurisoft.UtilidadesTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.UtilidadesTest.dll
+
+        **\Jurisoft.WorkflowsDefTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.WorkflowsDefTest.dll
+
+        **\Jurisoft.WorkflowsRunTimeTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.WorkflowsRunTimeTest.dll
+
+        **\ThomsonReuters.InfolexWeb.Admin.Service.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.Admin.Service.Test.dll
+
+        **\ThomsonReuters.InfolexWeb.CalculoIntereses.Service.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.CalculoIntereses.Service.Test.dll
+
+        **\ThomsonReuters.InfolexWeb.Service.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.Service.Test.dll
+
+        **\ThomsonReuters.InfolexWeb.UI.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.UI.Test.dll
+
+        **\TR.InfolexWeb.Service.BaseTest\bin\$(BuildPlatform)\$(BuildConfiguration)\TR.InfolexWeb.Service.BaseTest.dll
+
+        !**\obj\**
+      pathtoCustomTestAdapters: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\Extensions\TestPlatform
+      distributionBatchType: basedOnAssembly
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+...
+# Variable 'ConfigName' was defined in the Variables tab
+variables:
+- name: BuildParameters.solution
+  value: $(Build.Repository.LocalPath)\$(Build.DefinitionName)/ThomsonReuters.InfolexWeb/TestInfolexWeb.sln
+trigger:
+  paths:
+    include:
+    - $/SWF_Burgos_Spain/Infolex/Desarrollo/22Q4_159138
+name: $(date:yyyyMMdd)$(rev:.r)
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: $/SWF_Burgos_Spain/Infolex/Desarrollo/22Q4_159138
+lockBehavior: sequential    
+jobs:
+- job: Job_1
+  environment: dev  
+  displayName: Trabajo de agente 1
+  timeoutInMinutes: 300
+  pool:
+    name: SWF_Burgos_Spain_test
+    demands:
+    - env -equals dev
+  steps:
+  - checkout: self
+  - task: NuGetToolInstaller@0
+    displayName: Use NuGet 5.4.0
+    inputs:
+      versionSpec: 5.4.0
+  - task: NuGetCommand@2
+    displayName: NuGet restore
+    inputs:
+      solution: $(BuildParameters.solution)
+      selectOrConfig: config
+      feedRestore: /c800bdcb-5232-4f7e-965b-6f558250c9a7
+      nugetConfigPath: C:\scritpsdeploy\NuGet\NuGet.Config
+  - task: CmdLine@2
+    displayName: Command Line Script
+    enabled: False
+    inputs:
+      script: "@echo off\nsetlocal enabledelayedexpansion\nRem Buscamos todos los archivos de configuracion del entorno a remplazar en la rama \nfor /f %%a in ('dir /b /s %Build_SourcesDirectory%\\%Build_DefinitionName%\\*%ConfigNameWithExtension%  ^| findstr /V \"bin\" ') do (\nRem Inicializamos las variables\nset string= \nset rutaConfigProjecto= \nset result= \nset splitBarra= \nset namefile= \nset string= %%a\nRem obtenemos el path del config del entorno\nset rutaRelativaFuentes=!string:*Test=!\nset rutaConfigProjecto=!rutaRelativaFuentes:*Test=!\nrem echo !rutaProjecto!\nRem Separamos la ruta para buscar el nombre real del fichero\nset splitBarra=!string:\\= !\nRem Obtenemos el nombre real del fichero\nfor %%c in (!splitBarra!) do set namefile=%%c\nRem Eliminos la parte del entorno para obtener el nombre final del archivo de configuración\nset namefileDestination=!namefile:.%ConfigNameWithExtension%=.config!\nrem echo namefile:!namefileDestination!\nRem Eliminos ruta del config para obtener el path del proyecto\ncall set result=%%string:!rutaConfigProjecto!=\\%%\nRem call echo result:!result!\nset destination=!result:~1,-1!\\!namefileDestination! \nrem Eliminamos solo lectura del archivo\nattrib -r !destination!\nRem Sustituimos el config orginal por el del entorno\nrem echo destination:!destination!\ncopy !string! !destination!\nrem echo copiare!string!!destination!\n)"
+  - task: PowerShell@2
+    displayName: PowerShell Script
+    inputs:
+      filePath: C:\scritpsdeploy\PipelinesAutos\CopyConfigsPS.ps1
+      arguments: $(Build.SourcesDirectory)\$(Build.DefinitionName)  $(ConfigName)
+      script: >-
+        # Write your powershell commands here.
+
+
+        Write-Host "Hello World"
+
+
+        # Use the environment variables input below to pass secret variables to this script.
+      errorActionPreference: continue
+  - task: VSBuild@1
+    displayName: Build solution
+    inputs:
+      solution: $(BuildParameters.solution)
+      msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=false /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)"
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+      msbuildArchitecture: x64
+  - task: VSTest@2
+    displayName: Test Assemblies
+    inputs:
+      testAssemblyVer2: >-
+        **\Jurisoft.Infolex7.NegocioTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.Infolex7.NegocioTest.dll
+
+        **\Jurisoft.NegocioTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.NegocioTest.dll
+
+        **\Jurisoft.UtilidadesTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.UtilidadesTest.dll
+
+        **\Jurisoft.WorkflowsDefTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.WorkflowsDefTest.dll
+
+        **\Jurisoft.WorkflowsRunTimeTest\bin\$(BuildPlatform)\$(BuildConfiguration)\Jurisoft.WorkflowsRunTimeTest.dll
+
+        **\ThomsonReuters.InfolexWeb.Admin.Service.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.Admin.Service.Test.dll
+
+        **\ThomsonReuters.InfolexWeb.CalculoIntereses.Service.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.CalculoIntereses.Service.Test.dll
+
+        **\ThomsonReuters.InfolexWeb.Service.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.Service.Test.dll
+
+        **\ThomsonReuters.InfolexWeb.UI.Test\bin\$(BuildPlatform)\$(BuildConfiguration)\ThomsonReuters.InfolexWeb.UI.Test.dll
+
+        **\TR.InfolexWeb.Service.BaseTest\bin\$(BuildPlatform)\$(BuildConfiguration)\TR.InfolexWeb.Service.BaseTest.dll
+
+        !**\obj\**
+      pathtoCustomTestAdapters: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\Extensions\TestPlatform
+      distributionBatchType: basedOnAssembly
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+...
